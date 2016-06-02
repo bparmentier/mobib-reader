@@ -3,6 +3,7 @@
 import sys
 
 from smartcard.System import readers
+from smartcard.Exceptions import NoCardException
 
 CALYPSO_CLA = [0x94]
 SELECT_INS = [0xA4]
@@ -24,14 +25,18 @@ def main():
         print("No reader detected")
         sys.exit(1)
 
-    calypso = local_readers[readerIndex].createConnection()
-    calypso.connect()
+    try:
+        calypso = local_readers[readerIndex].createConnection()
+        calypso.connect()
+    except NoCardException:
+        print("No card connected")
+        sys.exit(1)
 
     select_apdu = CALYPSO_CLA + SELECT_INS + [0x00, 0x00, 0x02] + TICKETING_COUNTERS_FILE_ID + [0x00]
     data, sw1, sw2 = calypso.transmit(select_apdu)
     if sw1 == 0x61:
         get_response_apdu = [0x00] + GET_RESPONSE_INS + [0x00, 0x00, sw2]
-        data, sw1, sw2 = calypso.transmit(get_repsonse_apdu)
+        data, sw1, sw2 = calypso.transmit(get_response_apdu)
 
     read_record_apdu = CALYPSO_CLA + READ_RECORD_INS + [0x01, 0x04, 0x1D]
     data, sw1, sw2 = calypso.transmit(read_record_apdu)
@@ -46,7 +51,7 @@ def main():
         print("Number of remaining trips: {}".format(sum(data)))
     else:
         print("Error getting number of remaining trips")
-        sys.exit(2)
+        sys.exit(1)
 
 if __name__ == '__main__':
     main()
