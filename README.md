@@ -1,6 +1,7 @@
-# MOBIB Basic reader
+# MOBIB reader
 
-This tool currently retrieves the remaining number of trips available on your
-MOBIB Basic card.
+This tool currently retrieves the number of remaining trips available on your
+MOBIB card.
 
-MOBIB cards use the Calypso standard so the tool may work with other cards like Navigo or Lisboa VIVA.
+MOBIB uses the Calypso standard so the tool may also work with other cards like
+Navigo or Lisboa VIVA.
