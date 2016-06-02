@@ -12,5 +12,6 @@ setup(
     py_modules=['mobib'],
     entry_points={
         'console_scripts': ['mobib = mobib:main']
-    }
+    },
+    install_requires=['pyscard']
 )
